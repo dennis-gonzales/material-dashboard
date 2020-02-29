@@ -1,8 +1,12 @@
 package pro.dennisgonzales.moderndashboard
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.math.abs
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,6 +18,18 @@ class MainActivity : AppCompatActivity() {
 
         itemRecyclerView.adapter = ItemAdapter(exampleList)
         itemRecyclerView.setHasFixedSize(true)
+
+        hideTitleOnCollapsedToolbar()
+    }
+
+    private fun hideTitleOnCollapsedToolbar() {
+        appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener
+        { appBar: AppBarLayout, verticalOffset ->
+            collapsingToolbarLayout.title = when {
+                (abs(verticalOffset) - appBar.totalScrollRange != 0) -> ""
+                else -> getString(R.string.app_name)
+            }
+        })
     }
 
     private fun generateDummyList(size: Int): List<Item> {
@@ -33,14 +49,19 @@ class MainActivity : AppCompatActivity() {
                 else -> R.drawable.vector_man_5
             }
 
-            val itemBackground =when (i % 4){
+            val itemBackground = when (i % 4) {
                 0 -> R.drawable.item_1_background
                 1 -> R.drawable.item_2_background
                 2 -> R.drawable.item_3_background
                 else -> R.drawable.item_4_background
             }
 
-            val item = Item(itemLogo, itemBackground, "Test Name", "loremloremloremloremloremloremloremloremloremloremloremlorem")
+            val item = Item(
+                itemLogo,
+                itemBackground,
+                "Test Name",
+                "loremloremloremloremloremloremloremloremloremloremloremlorem"
+            )
             list += item
         }
 
